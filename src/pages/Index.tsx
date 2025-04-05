@@ -1,12 +1,63 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import Navbar from '@/components/Navbar';
+import EventCard from '@/components/EventCard';
+import { useEventContext } from '@/contexts/EventContext';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
+  const { events } = useEventContext();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      
+      <div className="bg-gradient-to-r from-brand-light to-secondary py-16 px-4">
+        <div className="container max-w-7xl mx-auto">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              PodWave <span className="text-primary">Event Hub</span>
+            </h1>
+            <p className="text-xl mb-8">
+              Connect with your favorite podcasters at live events, workshops, and virtual meetups.
+            </p>
+            <Button size="lg" asChild>
+              <Link to="/create">Create Your Event</Link>
+            </Button>
+          </div>
+        </div>
       </div>
+      
+      <div className="container max-w-7xl mx-auto py-12 px-4 flex-grow">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold">Upcoming Events</h2>
+          <Link to="/events" className="text-primary font-medium hover:underline">
+            View all events
+          </Link>
+        </div>
+        
+        {events.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {events.map(event => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground mb-4">No events available yet.</p>
+            <Button asChild>
+              <Link to="/create">Create the first event</Link>
+            </Button>
+          </div>
+        )}
+      </div>
+      
+      <footer className="bg-muted py-6">
+        <div className="container max-w-7xl mx-auto px-4 text-center text-muted-foreground">
+          <p>© 2025 PodWave Event Hub. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
