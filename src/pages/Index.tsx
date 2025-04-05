@@ -1,6 +1,5 @@
 
 import React from 'react';
-import Navbar from '@/components/Navbar';
 import EventCard from '@/components/EventCard';
 import { useEventContext } from '@/contexts/EventContext';
 import { Button } from '@/components/ui/button';
@@ -10,9 +9,7 @@ const Index = () => {
   const { events } = useEventContext();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
+    <div className="flex flex-col">
       <div className="bg-gradient-to-r from-brand-light to-secondary py-16 px-4">
         <div className="container max-w-7xl mx-auto">
           <div className="max-w-3xl">
@@ -52,12 +49,6 @@ const Index = () => {
           </div>
         )}
       </div>
-      
-      <footer className="bg-muted py-6">
-        <div className="container max-w-7xl mx-auto px-4 text-center text-muted-foreground">
-          <p>© 2025 PodWave Event Hub. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };

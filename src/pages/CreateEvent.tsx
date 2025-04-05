@@ -1,7 +1,5 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
 import { useEventContext } from '@/contexts/EventContext';
 import { 
   Card, CardContent, CardDescription, 
@@ -83,269 +81,259 @@ const CreateEvent = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <div className="container max-w-3xl mx-auto py-12 px-4 flex-grow">
+      <h1 className="text-3xl font-bold mb-8">Create New Event</h1>
       
-      <div className="container max-w-3xl mx-auto py-12 px-4 flex-grow">
-        <h1 className="text-3xl font-bold mb-8">Create New Event</h1>
+      <form onSubmit={handleSubmit}>
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Basic Information</CardTitle>
+            <CardDescription>Enter the details about your podcast event</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Event Title</Label>
+              <Input 
+                id="title" 
+                name="title" 
+                required
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="e.g., Podcast Production Workshop"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="podcastName">Podcast Name</Label>
+              <Input 
+                id="podcastName" 
+                name="podcastName" 
+                required
+                value={formData.podcastName}
+                onChange={handleChange}
+                placeholder="e.g., The Design Corner"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="description">Event Description</Label>
+              <Textarea 
+                id="description" 
+                name="description" 
+                required
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Describe your event details..."
+                rows={4}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="host">Host Name</Label>
+              <Input 
+                id="host" 
+                name="host" 
+                required
+                value={formData.host}
+                onChange={handleChange}
+                placeholder="e.g., John Smith"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="image">Event Image URL</Label>
+              <Input 
+                id="image" 
+                name="image" 
+                value={formData.image}
+                onChange={handleChange}
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+          </CardContent>
+        </Card>
         
-        <form onSubmit={handleSubmit}>
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
-              <CardDescription>Enter the details about your podcast event</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Event Details</CardTitle>
+            <CardDescription>Choose the type and logistics for your event</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="eventType">Event Type</Label>
+              <Select 
+                value={eventType} 
+                onValueChange={(value) => setEventType(value as 'virtual' | 'physical')}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select event type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="physical">Physical Event</SelectItem>
+                  <SelectItem value="virtual">Virtual Event</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Event Title</Label>
+                <Label htmlFor="date">Event Date</Label>
                 <Input 
-                  id="title" 
-                  name="title" 
+                  id="date" 
+                  name="date" 
+                  type="date" 
                   required
-                  value={formData.title}
+                  value={formData.date}
                   onChange={handleChange}
-                  placeholder="e.g., Podcast Production Workshop"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="podcastName">Podcast Name</Label>
+                <Label htmlFor="time">Start Time</Label>
                 <Input 
-                  id="podcastName" 
-                  name="podcastName" 
+                  id="time" 
+                  name="time" 
+                  type="time" 
                   required
-                  value={formData.podcastName}
+                  value={formData.time}
                   onChange={handleChange}
-                  placeholder="e.g., The Design Corner"
                 />
               </div>
-              
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="venue">
+                {eventType === 'virtual' ? 'Platform Name' : 'Venue Name'}
+              </Label>
+              <Input 
+                id="venue" 
+                name="venue" 
+                required
+                value={formData.venue}
+                onChange={handleChange}
+                placeholder={eventType === 'virtual' ? 'e.g., Zoom Webinar' : 'e.g., Conference Center'}
+              />
+            </div>
+            
+            {eventType === 'virtual' ? (
               <div className="space-y-2">
-                <Label htmlFor="description">Event Description</Label>
-                <Textarea 
-                  id="description" 
-                  name="description" 
-                  required
-                  value={formData.description}
-                  onChange={handleChange}
-                  placeholder="Describe your event details..."
-                  rows={4}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="host">Host Name</Label>
+                <Label htmlFor="meetLink">Meeting Link</Label>
                 <Input 
-                  id="host" 
-                  name="host" 
-                  required
-                  value={formData.host}
+                  id="meetLink" 
+                  name="meetLink"
+                  value={formData.meetLink}
                   onChange={handleChange}
-                  placeholder="e.g., John Smith"
+                  placeholder="e.g., https://zoom.us/j/123456789"
                 />
               </div>
-              
+            ) : (
               <div className="space-y-2">
-                <Label htmlFor="image">Event Image URL</Label>
+                <Label htmlFor="location">Address</Label>
                 <Input 
-                  id="image" 
-                  name="image" 
-                  value={formData.image}
+                  id="location" 
+                  name="location"
+                  value={formData.location}
                   onChange={handleChange}
-                  placeholder="https://example.com/image.jpg"
+                  placeholder="e.g., 123 Main St, City, State"
                 />
               </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Event Details</CardTitle>
-              <CardDescription>Choose the type and logistics for your event</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+            )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="eventType">Event Type</Label>
-                <Select 
-                  value={eventType} 
-                  onValueChange={(value) => setEventType(value as 'virtual' | 'physical')}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select event type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="physical">Physical Event</SelectItem>
-                    <SelectItem value="virtual">Virtual Event</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="date">Event Date</Label>
-                  <Input 
-                    id="date" 
-                    name="date" 
-                    type="date" 
-                    required
-                    value={formData.date}
-                    onChange={handleChange}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="time">Start Time</Label>
-                  <Input 
-                    id="time" 
-                    name="time" 
-                    type="time" 
-                    required
-                    value={formData.time}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="venue">
-                  {eventType === 'virtual' ? 'Platform Name' : 'Venue Name'}
-                </Label>
+                <Label htmlFor="ticketPrice">Ticket Price (USD)</Label>
                 <Input 
-                  id="venue" 
-                  name="venue" 
+                  id="ticketPrice" 
+                  name="ticketPrice" 
+                  type="number" 
+                  min="0"
                   required
-                  value={formData.venue}
-                  onChange={handleChange}
-                  placeholder={eventType === 'virtual' ? 'e.g., Zoom Webinar' : 'e.g., Conference Center'}
+                  value={formData.ticketPrice}
+                  onChange={handleNumberChange}
                 />
               </div>
               
-              {eventType === 'virtual' ? (
-                <div className="space-y-2">
-                  <Label htmlFor="meetLink">Meeting Link</Label>
-                  <Input 
-                    id="meetLink" 
-                    name="meetLink"
-                    value={formData.meetLink}
-                    onChange={handleChange}
-                    placeholder="e.g., https://zoom.us/j/123456789"
-                  />
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <Label htmlFor="location">Address</Label>
-                  <Input 
-                    id="location" 
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    placeholder="e.g., 123 Main St, City, State"
-                  />
-                </div>
-              )}
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="ticketPrice">Ticket Price (USD)</Label>
-                  <Input 
-                    id="ticketPrice" 
-                    name="ticketPrice" 
-                    type="number" 
-                    min="0"
-                    required
-                    value={formData.ticketPrice}
-                    onChange={handleNumberChange}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="totalSeats">Total Available Seats</Label>
-                  <Input 
-                    id="totalSeats" 
-                    name="totalSeats" 
-                    type="number" 
-                    min="1"
-                    required
-                    value={formData.totalSeats}
-                    onChange={handleNumberChange}
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="totalSeats">Total Available Seats</Label>
+                <Input 
+                  id="totalSeats" 
+                  name="totalSeats" 
+                  type="number" 
+                  min="1"
+                  required
+                  value={formData.totalSeats}
+                  onChange={handleNumberChange}
+                />
               </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Event Timeline</CardTitle>
-              <CardDescription>Add the schedule for your event</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {timeline.map((item, index) => (
-                <div key={index} className="flex gap-2 items-start">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
-                    <div className="space-y-2">
-                      <Label htmlFor={`time-${index}`}>Time</Label>
-                      <Input 
-                        id={`time-${index}`}
-                        value={item.time}
-                        onChange={(e) => handleTimelineChange(index, 'time', e.target.value)}
-                        placeholder="e.g., 10:00 AM"
-                      />
-                    </div>
-                    
-                    <div className="md:col-span-2 space-y-2">
-                      <Label htmlFor={`description-${index}`}>Description</Label>
-                      <Input 
-                        id={`description-${index}`}
-                        value={item.description}
-                        onChange={(e) => handleTimelineChange(index, 'description', e.target.value)}
-                        placeholder="e.g., Welcome and Registration"
-                      />
-                    </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Event Timeline</CardTitle>
+            <CardDescription>Add the schedule for your event</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {timeline.map((item, index) => (
+              <div key={index} className="flex gap-2 items-start">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
+                  <div className="space-y-2">
+                    <Label htmlFor={`time-${index}`}>Time</Label>
+                    <Input 
+                      id={`time-${index}`}
+                      value={item.time}
+                      onChange={(e) => handleTimelineChange(index, 'time', e.target.value)}
+                      placeholder="e.g., 10:00 AM"
+                    />
                   </div>
                   
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="mt-8"
-                    onClick={() => removeTimelineItem(index)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  <div className="md:col-span-2 space-y-2">
+                    <Label htmlFor={`description-${index}`}>Description</Label>
+                    <Input 
+                      id={`description-${index}`}
+                      value={item.description}
+                      onChange={(e) => handleTimelineChange(index, 'description', e.target.value)}
+                      placeholder="e.g., Welcome and Registration"
+                    />
+                  </div>
                 </div>
-              ))}
-              
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={addTimelineItem}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Timeline Item
-              </Button>
-            </CardContent>
-          </Card>
-          
-          <div className="flex justify-end gap-4">
+                
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="mt-8"
+                  onClick={() => removeTimelineItem(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            
             <Button
               type="button"
               variant="outline"
-              onClick={() => navigate('/events')}
+              className="w-full"
+              onClick={addTimelineItem}
             >
-              Cancel
+              <Plus className="mr-2 h-4 w-4" />
+              Add Timeline Item
             </Button>
-            <Button type="submit">Create Event</Button>
-          </div>
-        </form>
-      </div>
-      
-      <footer className="bg-muted py-6 mt-12">
-        <div className="container max-w-7xl mx-auto px-4 text-center text-muted-foreground">
-          <p>© 2025 PodWave Event Hub. All rights reserved.</p>
+          </CardContent>
+        </Card>
+        
+        <div className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate('/events')}
+          >
+            Cancel
+          </Button>
+          <Button type="submit">Create Event</Button>
         </div>
-      </footer>
+      </form>
     </div>
   );
 };
